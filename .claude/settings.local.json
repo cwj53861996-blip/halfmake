@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(git commit -m \"$(cat <<''EOF''\n初始化手工制作APP项目 - v2.0 UI设计版本\n\n- 完整的5页面设计（首页、搜索、详情、工作台、个人页）\n- 现代化色彩系统（6色方案）\n- iOS HIG设计规范\n- 完整文档和SVG原型\n\n🤖 Generated with Claude Code\n\nCo-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>\nEOF\n)\")"
-    ],
-    "deny": [],
-    "ask": []
-  }
-}
