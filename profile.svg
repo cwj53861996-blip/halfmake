@@ -1,0 +1,128 @@
+<svg width="393" height="852" viewBox="0 0 393 852" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <g id="background">
+    <rect width="393" height="852" fill="#FFFFFF"/>
+  </g>
+  
+  <!-- 状态栏 -->
+  <g id="status-bar">
+    <text x="20" y="20" font-family="Arial" font-size="14" font-weight="600" fill="#000000">9:41</text>
+    <text x="350" y="20" font-family="Arial" font-size="12" fill="#000000">100%</text>
+    <rect x="330" y="8" width="20" height="10" rx="2" fill="#000000"/>
+    <rect x="355" y="10" width="2" height="6" fill="#000000"/>
+  </g>
+  
+  <!-- 个人信息区 -->
+  <g id="user-info">
+    <rect x="0" y="40" width="393" height="180" fill="#FFFFFF"/>
+    <circle cx="196.5" cy="100" r="50" fill="#E8E8E8" stroke="#D0D0D0" stroke-width="2"/>
+    <circle cx="196.5" cy="95" r="20" fill="none" stroke="#999999" stroke-width="1.5"/>
+    <path d="M 176.5 115 Q 196.5 125 216.5 115" stroke="#999999" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <text x="196.5" y="170" font-family="Arial" font-size="20" font-weight="600" fill="#000000" text-anchor="middle">手工爱好者</text>
+    <text x="196.5" y="195" font-family="Arial" font-size="14" fill="#666666" text-anchor="middle">ID: handcraft_001</text>
+  </g>
+  
+  <!-- 数据统计 -->
+  <g id="stats">
+    <rect x="20" y="240" width="353" height="80" rx="12" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1"/>
+    <!-- 作品数 -->
+    <g id="stat-works">
+      <rect x="40" y="260" width="100" height="40" fill="none"/>
+      <text x="90" y="280" font-family="Arial" font-size="24" font-weight="600" fill="#8B5CF6" text-anchor="middle">12</text>
+      <text x="90" y="295" font-family="Arial" font-size="12" fill="#666666" text-anchor="middle">作品</text>
+    </g>
+    <!-- 收藏数 -->
+    <g id="stat-favorites">
+      <rect x="146.5" y="260" width="100" height="40" fill="none"/>
+      <text x="196.5" y="280" font-family="Arial" font-size="24" font-weight="600" fill="#8B5CF6" text-anchor="middle">28</text>
+      <text x="196.5" y="295" font-family="Arial" font-size="12" fill="#666666" text-anchor="middle">收藏</text>
+    </g>
+    <!-- 项目数 -->
+    <g id="stat-projects">
+      <rect x="253" y="260" width="100" height="40" fill="none"/>
+      <text x="303" y="280" font-family="Arial" font-size="24" font-weight="600" fill="#8B5CF6" text-anchor="middle">5</text>
+      <text x="303" y="295" font-family="Arial" font-size="12" fill="#666666" text-anchor="middle">项目</text>
+    </g>
+  </g>
+  
+  <!-- 功能菜单 -->
+  <g id="menu">
+    <!-- 我的作品集 -->
+    <g id="menu-works">
+      <rect x="20" y="340" width="353" height="60" rx="12" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1"/>
+      <rect x="30" y="350" width="40" height="40" rx="8" fill="#8B5CF6" fill-opacity="0.1"/>
+      <rect x="38" y="358" width="24" height="24" rx="4" fill="none" stroke="#8B5CF6" stroke-width="1.5"/>
+      <circle cx="46" cy="366" r="3" fill="#8B5CF6"/>
+      <circle cx="54" cy="374" r="2" fill="#8B5CF6"/>
+      <text x="85" y="375" font-family="Arial" font-size="16" fill="#000000">我的作品集</text>
+      <path d="M 350 370 L 360 365 L 360 375 Z" fill="#999999"/>
+    </g>
+    
+    <!-- 我的收藏 -->
+    <g id="menu-favorites">
+      <rect x="20" y="420" width="353" height="60" rx="12" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1"/>
+      <rect x="30" y="430" width="40" height="40" rx="8" fill="#8B5CF6" fill-opacity="0.1"/>
+      <path d="M 50 445 L 45 450 L 50 455 L 55 450 Z" fill="none" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M 50 445 L 50 455" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round"/>
+      <text x="85" y="455" font-family="Arial" font-size="16" fill="#000000">我的收藏</text>
+      <path d="M 350 450 L 360 445 L 360 455 Z" fill="#999999"/>
+    </g>
+    
+    <!-- 设置 -->
+    <g id="menu-settings">
+      <rect x="20" y="500" width="353" height="60" rx="12" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1"/>
+      <rect x="30" y="510" width="40" height="40" rx="8" fill="#8B5CF6" fill-opacity="0.1"/>
+      <circle cx="50" cy="530" r="12" fill="none" stroke="#8B5CF6" stroke-width="1.5"/>
+      <circle cx="50" cy="520" r="3" fill="#8B5CF6"/>
+      <path d="M 42 530 L 42 535 M 58 530 L 58 535" stroke="#8B5CF6" stroke-width="1.5" stroke-linecap="round"/>
+      <text x="85" y="535" font-family="Arial" font-size="16" fill="#000000">设置</text>
+      <path d="M 350 530 L 360 525 L 360 535 Z" fill="#999999"/>
+    </g>
+  </g>
+  
+  <!-- 作品集展示 -->
+  <g id="works-gallery">
+    <text x="20" y="600" font-family="Arial" font-size="18" font-weight="600" fill="#000000">最近作品</text>
+    <!-- 作品网格 -->
+    <g id="works-grid">
+      <rect x="20" y="620" width="110" height="110" rx="12" fill="#F5F5F5" stroke="#E0E0E0" stroke-width="1"/>
+      <text x="75" y="680" font-family="Arial" font-size="10" fill="#999999" text-anchor="middle">作品1</text>
+      <rect x="141.5" y="620" width="110" height="110" rx="12" fill="#F5F5F5" stroke="#E0E0E0" stroke-width="1"/>
+      <text x="196.5" y="680" font-family="Arial" font-size="10" fill="#999999" text-anchor="middle">作品2</text>
+      <rect x="263" y="620" width="110" height="110" rx="12" fill="#F5F5F5" stroke="#E0E0E0" stroke-width="1"/>
+      <text x="318" y="680" font-family="Arial" font-size="10" fill="#999999" text-anchor="middle">作品3</text>
+    </g>
+  </g>
+  
+  <!-- 底部导航栏 -->
+  <g id="bottom-nav">
+    <rect x="0" y="780" width="393" height="72" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1"/>
+    <g id="nav-home">
+      <rect x="0" y="780" width="131" height="72" fill="none"/>
+      <path d="M 65.5 800 L 45 820 L 45 835 L 65.5 850 L 86 835 L 86 820 Z" fill="none" stroke="#999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M 55 820 L 55 835 L 65.5 845 L 76 835 L 76 820" fill="#999999"/>
+      <text x="65.5" y="860" font-family="Arial" font-size="12" fill="#999999" text-anchor="middle">首页</text>
+    </g>
+    <g id="nav-workspace">
+      <rect x="131" y="780" width="131" height="72" fill="none"/>
+      <rect x="171.5" y="800" width="30" height="30" rx="4" fill="none" stroke="#999999" stroke-width="1.5"/>
+      <rect x="176.5" y="805" width="20" height="20" rx="2" fill="none" stroke="#999999" stroke-width="1"/>
+      <text x="196.5" y="860" font-family="Arial" font-size="12" fill="#999999" text-anchor="middle">工作台</text>
+    </g>
+    <g id="nav-profile">
+      <rect x="262" y="780" width="131" height="72" fill="none"/>
+      <circle cx="327.5" cy="815" r="15" fill="none" stroke="#8B5CF6" stroke-width="2"/>
+      <circle cx="327.5" cy="810" r="6" fill="none" stroke="#8B5CF6" stroke-width="2"/>
+      <path d="M 315 825 Q 327.5 830 340 825" stroke="#8B5CF6" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <text x="327.5" y="860" font-family="Arial" font-size="12" fill="#8B5CF6" text-anchor="middle">我的</text>
+    </g>
+  </g>
+</svg>
+
+
+
+
+
+
+
+

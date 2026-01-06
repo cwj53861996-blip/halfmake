@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>详情 - 手工制作</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    let currentFilter = 'all';
+    let currentProject = null;
+
+    function getProjectFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      const projectId = params.get('projectId');
+      const source = params.get('source') || 'home';
+
+      if (projectId) {
+        const projects = JSON.parse(localStorage.getItem('joinedProjects') || '[]');
+        currentProject = projects.find(p => p.id === projectId);
+
+        if (currentProject && source === 'workspace-projects') {
+          // 更新项目状态为进行中
+          currentProject.status = 'in_progress';
+          currentProject.startDate = currentProject.startDate || new Date().toLocaleDateString('zh-CN');
+          projects[projects.indexOf(currentProject)] = currentProject;
+          localStorage.setItem('joinedProjects', JSON.stringify(projects));
+
+          // 更新页面标题
+          document.title = currentProject.name + ' - 手工制作';
+        }
+      }
+    }
+
+    function backToWorkspace() {
+      history.back();
+    }
+    
+    function switchView(viewType) {
+      const partView = document.getElementById('part-view');
+      const bodyView = document.getElementById('body-view');
+      const commentView = document.getElementById('comment-view');
+      const partBtn = document.getElementById('part-btn');
+      const bodyBtn = document.getElementById('body-btn');
+      const commentBtn = document.getElementById('comment-btn');
+      
+      // 隐藏所有视图
+      partView.classList.add('hidden');
+      bodyView.classList.add('hidden');
+      commentView.classList.add('hidden');
+      
+      // 重置所有按钮样式
+      partBtn.classList.remove('bg-gray-700', 'text-white');
+      partBtn.classList.add('bg-gray-100', 'text-gray-600');
+      bodyBtn.classList.remove('bg-gray-700', 'text-white');
+      bodyBtn.classList.add('bg-gray-100', 'text-gray-600');
+      commentBtn.classList.remove('bg-gray-700', 'text-white');
+      commentBtn.classList.add('bg-gray-100', 'text-gray-600');
+      
+      // 显示对应视图并高亮按钮
+      if (viewType === 'part') {
+        partView.classList.remove('hidden');
+        partBtn.classList.add('bg-gray-700', 'text-white');
+        partBtn.classList.remove('bg-gray-100', 'text-gray-600');
+      } else if (viewType === 'body') {
+        bodyView.classList.remove('hidden');
+        bodyBtn.classList.add('bg-gray-700', 'text-white');
+        bodyBtn.classList.remove('bg-gray-100', 'text-gray-600');
+      } else {
+        commentView.classList.remove('hidden');
+        commentBtn.classList.add('bg-gray-700', 'text-white');
+        commentBtn.classList.remove('bg-gray-100', 'text-gray-600');
+      }
+    }
+    
+    function filterComments(bodyPart) {
+      currentFilter = bodyPart;
+      const comments = document.querySelectorAll('.comment-item');
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      
+      // 更新筛选按钮样式
+      filterBtns.forEach(btn => {
+        if (btn.dataset.filter === bodyPart) {
+          btn.classList.add('bg-gray-700', 'text-white');
+          btn.classList.remove('bg-gray-100', 'text-gray-500');
+        } else {
+          btn.classList.remove('bg-gray-700', 'text-white');
+          btn.classList.add('bg-gray-100', 'text-gray-500');
+        }
+      });
+      
+      // 筛选评论
+      comments.forEach(comment => {
+        if (bodyPart === 'all' || comment.dataset.bodyPart === bodyPart) {
+          comment.classList.remove('hidden');
+        } else {
+          comment.classList.add('hidden');
+        }
+      });
+    }
+    
+    function showCommentInput(bodyPart) {
+      const input = document.getElementById('comment-input');
+      const inputBodyPart = document.getElementById('comment-body-part');
+      inputBodyPart.textContent = bodyPart || '全部';
+      input.value = '';
+      input.focus();
+      document.getElementById('comment-section').scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</head>
+<body class="bg-gray-50" onload="getProjectFromURL()">
+  <!-- 状态栏 -->
+  <div class="bg-white px-5 py-2 flex justify-between items-center text-xs font-semibold">
+    <span>9:41</span>
+    <div class="flex items-center gap-1">
+      <span class="text-xs">100%</span>
+      <div class="w-5 h-2.5 bg-black rounded-sm"></div>
+      <div class="w-0.5 h-1.5 bg-black"></div>
+    </div>
+  </div>
+
+  <!-- 顶部导航 - 优化设计 -->
+  <div class="bg-white border-b border-gray-200 px-4 py-3.5 flex items-center gap-3 sticky top-0 z-10">
+    <a href="javascript:backToWorkspace()" class="text-gray-600 hover:text-gray-800 transition-colors">
+      <i class="fas fa-arrow-left text-lg"></i>
+    </a>
+    <h1 class="flex-1 text-lg font-bold text-gray-900" id="project-title">RG 自由高达</h1>
+    <button class="text-gray-600 hover:text-gray-800 transition-colors">
+      <i class="fas fa-share-alt text-lg"></i>
+    </button>
+  </div>
+
+  <!-- 高达模型卡片 - 左图右信息 - 优化设计 -->
+  <div class="bg-gradient-to-b from-gray-50 to-white border-b border-gray-200 px-4 py-4">
+    <div class="flex gap-4">
+      <!-- 左侧：缩略图 -->
+      <div class="flex-shrink-0 w-32 h-32 bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm">
+        <img src="https://images.unsplash.com/photo-1607603752448-5b0b8c0a8c4a?w=200&h=200&fit=crop" alt="gundam" class="w-full h-full object-cover">
+      </div>
+
+      <!-- 右侧：详细信息 -->
+      <div class="flex-1 flex flex-col justify-between">
+        <div>
+          <h2 class="text-lg font-bold text-gray-900 mb-2">RG 自由高达</h2>
+          <div class="space-y-2 text-xs text-gray-700">
+            <p><span class="font-semibold text-gray-900">比例：</span>1/144</p>
+            <p><span class="font-semibold text-gray-900">难度：</span>中等</p>
+            <p><span class="font-semibold text-gray-900">零件数：</span>45个</p>
+            <p><span class="font-semibold text-gray-900">时间：</span>3-5小时</p>
+          </div>
+        </div>
+        <p class="text-xs text-gray-600 mt-2">精细的高达模型组装项目，包含完整的取件表和组装指南</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 视图切换按钮 - 优化设计 -->
+  <div class="px-4 py-4 bg-white border-b border-gray-200">
+    <div class="flex gap-2 bg-gray-100 rounded-2xl p-1.5">
+      <button id="part-btn" onclick="switchView('part')" class="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm font-semibold transition-all shadow-sm">
+        <i class="fas fa-layer-group mr-1"></i>按板件
+      </button>
+      <button id="body-btn" onclick="switchView('body')" class="flex-1 py-2.5 px-4 rounded-xl bg-white text-gray-700 text-sm font-medium transition-all hover:bg-gray-50">
+        <i class="fas fa-user-astronaut mr-1"></i>按部位
+      </button>
+      <button id="comment-btn" onclick="switchView('comment')" class="flex-1 py-2.5 px-4 rounded-xl bg-white text-gray-700 text-sm font-medium transition-all hover:bg-gray-50 relative">
+        <i class="fas fa-comments mr-1"></i>评论
+        <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">12</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- 按板件视图 -->
+  <div id="part-view" class="px-4 py-4 pb-20">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">板件取件表</h2>
+    <div class="space-y-3">
+      <!-- 板件卡片1 -->
+      <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+        <div class="flex items-start gap-3">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center text-sm font-bold text-gray-600">A</span>
+              <h3 class="text-sm font-semibold text-gray-800">A板件</h3>
+              <span class="text-xs text-gray-500">15个零件</span>
+            </div>
+            <p class="text-xs text-gray-500 mb-2">颜色: 白色 | 状态: 已取件</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded">A1-A3: 头部</span>
+              <span class="text-xs bg-green-50 text-green-600 px-2 py-0.5 rounded">A4-A7: 左臂</span>
+              <span class="text-xs bg-gray-50 text-gray-600 px-2 py-0.5 rounded">A8-A12: 胸部</span>
+              <span class="text-xs bg-amber-50 text-amber-600 px-2 py-0.5 rounded">A13-A15: 腰部</span>
+            </div>
+          </div>
+          <span class="text-xs text-gray-700 bg-gray-100 px-2 py-1 rounded-full whitespace-nowrap">已取</span>
+        </div>
+      </div>
+
+      <!-- 板件卡片2 -->
+      <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+        <div class="flex items-start gap-3">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center text-sm font-bold text-gray-600">B</span>
+              <h3 class="text-sm font-semibold text-gray-800">B板件</h3>
+              <span class="text-xs text-gray-500">12个零件</span>
+            </div>
+            <p class="text-xs text-gray-500 mb-2">颜色: 蓝色 | 状态: 未取件</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded">B1-B4: 右臂</span>
+              <span class="text-xs bg-green-50 text-green-600 px-2 py-0.5 rounded">B5-B8: 左肩</span>
+              <span class="text-xs bg-gray-50 text-gray-600 px-2 py-0.5 rounded">B9-B12: 右肩</span>
+            </div>
+          </div>
+          <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full whitespace-nowrap">未取</span>
+        </div>
+      </div>
+
+      <!-- 板件卡片3 -->
+      <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+        <div class="flex items-start gap-3">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center text-sm font-bold text-gray-600">C</span>
+              <h3 class="text-sm font-semibold text-gray-800">C板件</h3>
+              <span class="text-xs text-gray-500">8个零件</span>
+            </div>
+            <p class="text-xs text-gray-500 mb-2">颜色: 红色 | 状态: 未取件</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded">C1-C3: 左腿</span>
+              <span class="text-xs bg-green-50 text-green-600 px-2 py-0.5 rounded">C4-C6: 右腿</span>
+              <span class="text-xs bg-gray-50 text-gray-600 px-2 py-0.5 rounded">C7-C8: 脚部</span>
+            </div>
+          </div>
+          <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full whitespace-nowrap">未取</span>
+        </div>
+      </div>
+
+      <!-- 板件卡片4 -->
+      <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+        <div class="flex items-start gap-3">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center text-sm font-bold text-gray-600">D</span>
+              <h3 class="text-sm font-semibold text-gray-800">D板件</h3>
+              <span class="text-xs text-gray-500">10个零件</span>
+            </div>
+            <p class="text-xs text-gray-500 mb-2">颜色: 黄色 | 状态: 未取件</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded">D1-D2: 武器</span>
+              <span class="text-xs bg-green-50 text-green-600 px-2 py-0.5 rounded">D3-D5: 背包</span>
+              <span class="text-xs bg-gray-50 text-gray-600 px-2 py-0.5 rounded">D6-D10: 配件</span>
+            </div>
+          </div>
+          <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full whitespace-nowrap">未取</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 按部位视图 -->
+  <div id="body-view" class="px-4 py-4 pb-20 hidden">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">部位汇总</h2>
+    <div class="space-y-3">
+      <!-- 头部 -->
+      <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+        <div class="flex items-start gap-3">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <i class="fas fa-head-side-virus text-blue-600 text-lg w-6 h-6 flex items-center justify-center"></i>
+              <h3 class="text-sm font-semibold text-gray-800">头部</h3>
+              <span class="text-xs text-gray-500">3个零件</span>
+            </div>
+            <p class="text-xs text-gray-500 mb-2">板件: A1-A3</p>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="text-gray-600">A1</span>
+              <span class="text-gray-600">A2</span>
+              <span class="text-gray-600">A3</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="showCommentInput('头部')" class="text-xs text-gray-600 bg-gray-50 px-2 py-1 rounded-full hover:bg-gray-100 transition-colors">
+              <i class="fas fa-comment-dots mr-1"></i>评论(3)
+            </button>
+            <span class="text-xs text-gray-600 bg-gray-50 px-3 py-1.5 rounded-full font-medium">已完成</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 胸部 -->
+      <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+        <div class="flex items-start gap-3">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <i class="fas fa-vest text-gray-600 text-lg w-6 h-6 flex items-center justify-center"></i>
+              <h3 class="text-sm font-semibold text-gray-800">胸部</h3>
+              <span class="text-xs text-gray-500">5个零件</span>
+            </div>
+            <p class="text-xs text-gray-500 mb-2">板件: A8-A12</p>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="text-gray-600">A8</span>
+              <span class="text-gray-600">A9</span>
+              <span class="text-gray-600">A10</span>
+              <span class="text-gray-600">A11</span>
+              <span class="text-gray-600">A12</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="showCommentInput('胸部')" class="text-xs text-gray-600 bg-gray-50 px-2 py-1 rounded-full hover:bg-gray-100 transition-colors">
+              <i class="fas fa-comment-dots mr-1"></i>评论(1)
+            </button>
+            <span class="text-xs text-gray-600 bg-gray-50 px-3 py-1.5 rounded-full font-medium">已完成</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 左臂 -->
+      <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+        <div class="flex items-start gap-3">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <i class="fas fa-hand-paper text-green-600 text-lg w-6 h-6 flex items-center justify-center"></i>
+              <h3 class="text-sm font-semibold text-gray-800">左臂</h3>
+              <span class="text-xs text-gray-500">4个零件</span>
+            </div>
+            <p class="text-xs text-gray-500 mb-2">板件: A4-A7</p>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="text-gray-600">A4</span>
+              <span class="text-gray-600">A5</span>
+              <span class="text-gray-600">A6</span>
+              <span class="text-gray-600">A7</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="showCommentInput('左臂')" class="text-xs text-gray-600 bg-gray-50 px-2 py-1 rounded-full hover:bg-gray-100 transition-colors">
+              <i class="fas fa-comment-dots mr-1"></i>评论(1)
+            </button>
+            <span class="text-xs text-gray-600 bg-gray-50 px-3 py-1.5 rounded-full font-medium">已完成</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右臂 -->
+      <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+        <div class="flex items-start gap-3">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <i class="fas fa-hand-paper text-green-600 text-lg w-6 h-6 flex items-center justify-center"></i>
+              <h3 class="text-sm font-semibold text-gray-800">右臂</h3>
+              <span class="text-xs text-gray-500">4个零件</span>
+            </div>
+            <p class="text-xs text-gray-500 mb-2">板件: B1-B4</p>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="text-gray-400">B1</span>
+              <span class="text-gray-400">B2</span>
+              <span class="text-gray-400">B3</span>
+              <span class="text-gray-400">B4</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="showCommentInput('右臂')" class="text-xs text-gray-600 bg-gray-50 px-2 py-1 rounded-full hover:bg-gray-100 transition-colors">
+              <i class="fas fa-comment-dots mr-1"></i>评论(1)
+            </button>
+            <span class="text-xs text-gray-500 bg-gray-100 px-3 py-1.5 rounded-full font-medium">未完成</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 左肩 -->
+      <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+        <div class="flex items-start gap-3">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <i class="fas fa-shield-alt text-amber-600 text-lg w-6 h-6 flex items-center justify-center"></i>
+              <h3 class="text-sm font-semibold text-gray-800">左肩</h3>
+              <span class="text-xs text-gray-500">4个零件</span>
+            </div>
+            <p class="text-xs text-gray-500 mb-2">板件: B5-B8</p>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="text-gray-400">B5</span>
+              <span class="text-gray-400">B6</span>
+              <span class="text-gray-400">B7</span>
+              <span class="text-gray-400">B8</span>
+            </div>
+          </div>
+          <span class="text-xs text-gray-500 bg-gray-100 px-3 py-1.5 rounded-full font-medium">未完成</span>
+        </div>
+      </div>
+
+      <!-- 右肩 -->
+      <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+        <div class="flex items-start gap-3">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <i class="fas fa-shield-alt text-amber-600 text-lg w-6 h-6 flex items-center justify-center"></i>
+              <h3 class="text-sm font-semibold text-gray-800">右肩</h3>
+              <span class="text-xs text-gray-500">4个零件</span>
+            </div>
+            <p class="text-xs text-gray-500 mb-2">板件: B9-B12</p>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="text-gray-400">B9</span>
+              <span class="text-gray-400">B10</span>
+              <span class="text-gray-400">B11</span>
+              <span class="text-gray-400">B12</span>
+            </div>
+          </div>
+          <span class="text-xs text-gray-500 bg-gray-100 px-3 py-1.5 rounded-full font-medium">未完成</span>
+        </div>
+      </div>
+
+      <!-- 腰部 -->
+      <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+        <div class="flex items-start gap-3">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <i class="fas fa-circle text-pink-600 text-lg w-6 h-6 flex items-center justify-center"></i>
+              <h3 class="text-sm font-semibold text-gray-800">腰部</h3>
+              <span class="text-xs text-gray-500">3个零件</span>
+            </div>
+            <p class="text-xs text-gray-500 mb-2">板件: A13-A15</p>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="text-gray-600">A13</span>
+              <span class="text-gray-600">A14</span>
+              <span class="text-gray-600">A15</span>
+            </div>
+          </div>
+          <span class="text-xs text-gray-600 bg-gray-50 px-3 py-1.5 rounded-full font-medium">已完成</span>
+        </div>
+      </div>
+
+      <!-- 左腿 -->
+      <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+        <div class="flex items-start gap-3">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <i class="fas fa-walking text-red-600 text-lg w-6 h-6 flex items-center justify-center"></i>
+              <h3 class="text-sm font-semibold text-gray-800">左腿</h3>
+              <span class="text-xs text-gray-500">3个零件</span>
+            </div>
+            <p class="text-xs text-gray-500 mb-2">板件: C1-C3</p>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="text-gray-400">C1</span>
+              <span class="text-gray-400">C2</span>
+              <span class="text-gray-400">C3</span>
+            </div>
+          </div>
+          <span class="text-xs text-gray-500 bg-gray-100 px-3 py-1.5 rounded-full font-medium">未完成</span>
+        </div>
+      </div>
+
+      <!-- 右腿 -->
+      <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+        <div class="flex items-start gap-3">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <i class="fas fa-walking text-red-600 text-lg w-6 h-6 flex items-center justify-center"></i>
+              <h3 class="text-sm font-semibold text-gray-800">右腿</h3>
+              <span class="text-xs text-gray-500">3个零件</span>
+            </div>
+            <p class="text-xs text-gray-500 mb-2">板件: C4-C6</p>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="text-gray-400">C4</span>
+              <span class="text-gray-400">C5</span>
+              <span class="text-gray-400">C6</span>
+            </div>
+          </div>
+          <span class="text-xs text-gray-500 bg-gray-100 px-3 py-1.5 rounded-full font-medium">未完成</span>
+        </div>
+      </div>
+
+      <!-- 脚部 -->
+      <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+        <div class="flex items-start gap-3">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <i class="fas fa-shoe-prints text-indigo-600 text-lg w-6 h-6 flex items-center justify-center"></i>
+              <h3 class="text-sm font-semibold text-gray-800">脚部</h3>
+              <span class="text-xs text-gray-500">2个零件</span>
+            </div>
+            <p class="text-xs text-gray-500 mb-2">板件: C7-C8</p>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="text-gray-400">C7</span>
+              <span class="text-gray-400">C8</span>
+            </div>
+          </div>
+          <span class="text-xs text-gray-500 bg-gray-100 px-3 py-1.5 rounded-full font-medium">未完成</span>
+        </div>
+      </div>
+
+      <!-- 武器 -->
+      <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+        <div class="flex items-start gap-3">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <i class="fas fa-sword text-yellow-600 text-lg w-6 h-6 flex items-center justify-center"></i>
+              <h3 class="text-sm font-semibold text-gray-800">武器</h3>
+              <span class="text-xs text-gray-500">2个零件</span>
+            </div>
+            <p class="text-xs text-gray-500 mb-2">板件: D1-D2</p>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="text-gray-400">D1</span>
+              <span class="text-gray-400">D2</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="showCommentInput('武器')" class="text-xs text-gray-600 bg-gray-50 px-2 py-1 rounded-full hover:bg-gray-100 transition-colors">
+              <i class="fas fa-comment-dots mr-1"></i>评论(1)
+            </button>
+            <span class="text-xs text-gray-500 bg-gray-100 px-3 py-1.5 rounded-full font-medium">未完成</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 背包 -->
+      <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+        <div class="flex items-start gap-3">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <i class="fas fa-backpack text-teal-600 text-lg w-6 h-6 flex items-center justify-center"></i>
+              <h3 class="text-sm font-semibold text-gray-800">背包</h3>
+              <span class="text-xs text-gray-500">3个零件</span>
+            </div>
+            <p class="text-xs text-gray-500 mb-2">板件: D3-D5</p>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="text-gray-400">D3</span>
+              <span class="text-gray-400">D4</span>
+              <span class="text-gray-400">D5</span>
+            </div>
+          </div>
+          <span class="text-xs text-gray-500 bg-gray-100 px-3 py-1.5 rounded-full font-medium">未完成</span>
+        </div>
+      </div>
+
+      <!-- 配件 -->
+      <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+        <div class="flex items-start gap-3">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <i class="fas fa-puzzle-piece text-cyan-600 text-lg w-6 h-6 flex items-center justify-center"></i>
+              <h3 class="text-sm font-semibold text-gray-800">配件</h3>
+              <span class="text-xs text-gray-500">5个零件</span>
+            </div>
+            <p class="text-xs text-gray-500 mb-2">板件: D6-D10</p>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="text-gray-400">D6</span>
+              <span class="text-gray-400">D7</span>
+              <span class="text-gray-400">D8</span>
+              <span class="text-gray-400">D9</span>
+              <span class="text-gray-400">D10</span>
+            </div>
+          </div>
+          <span class="text-xs text-gray-500 bg-gray-100 px-3 py-1.5 rounded-full font-medium">未完成</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 评论视图 -->
+  <div id="comment-view" class="px-4 py-4 pb-20 hidden">
+    <!-- 评论统计 -->
+    <div class="bg-white rounded-xl p-4 shadow-sm mb-4">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-lg font-semibold text-gray-800">评论 (12)</h2>
+        <button onclick="showCommentInput()" class="text-sm text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">
+          <i class="fas fa-edit mr-1"></i>写评论
+        </button>
+      </div>
+      
+      <!-- 部位筛选 -->
+      <div class="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
+        <button onclick="filterComments('all')" class="filter-btn px-3 py-1.5 rounded-lg bg-gray-700 text-white text-xs font-medium whitespace-nowrap transition-all" data-filter="all">
+          全部
+        </button>
+        <button onclick="filterComments('头部')" class="filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-xs font-medium whitespace-nowrap transition-all" data-filter="头部">
+          头部
+        </button>
+        <button onclick="filterComments('胸部')" class="filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-xs font-medium whitespace-nowrap transition-all" data-filter="胸部">
+          胸部
+        </button>
+        <button onclick="filterComments('左臂')" class="filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-xs font-medium whitespace-nowrap transition-all" data-filter="左臂">
+          左臂
+        </button>
+        <button onclick="filterComments('右臂')" class="filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-xs font-medium whitespace-nowrap transition-all" data-filter="右臂">
+          右臂
+        </button>
+        <button onclick="filterComments('武器')" class="filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-xs font-medium whitespace-nowrap transition-all" data-filter="武器">
+          武器
+        </button>
+      </div>
+    </div>
+
+    <!-- 评论输入区域 -->
+    <div id="comment-section" class="bg-white rounded-xl p-4 shadow-sm mb-4">
+      <div class="flex items-start gap-3">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=40&h=40&fit=crop" alt="avatar" class="w-10 h-10 rounded-full">
+        <div class="flex-1">
+          <div class="mb-2">
+            <span class="text-xs text-gray-500">评论部位: </span>
+            <span id="comment-body-part" class="text-xs text-gray-600 font-medium">全部</span>
+          </div>
+          <textarea id="comment-input" placeholder="分享你的制作心得..." class="w-full bg-gray-50 rounded-lg p-3 text-sm border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-600 resize-none" rows="3"></textarea>
+          <div class="flex items-center justify-between mt-2">
+            <button class="text-xs text-gray-500 hover:text-gray-600">
+              <i class="fas fa-image mr-1"></i>添加图片
+            </button>
+            <button class="bg-gray-700 text-white px-4 py-1.5 rounded-lg text-sm hover:bg-gray-800 transition-colors">
+              发布
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 评论列表 -->
+    <div class="space-y-3">
+      <!-- 评论项1 -->
+      <div class="comment-item bg-white rounded-xl p-4 shadow-sm" data-body-part="头部">
+        <div class="flex items-start gap-3">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=40&h=40&fit=crop" alt="avatar" class="w-10 h-10 rounded-full">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-sm font-semibold text-gray-800">手工达人</span>
+              <span class="text-xs text-gray-600 bg-gray-50 px-2 py-0.5 rounded-full">头部</span>
+              <span class="text-xs text-gray-400">2小时前</span>
+            </div>
+            <p class="text-sm text-gray-700 mb-2">头部的A1-A3零件组合时要注意角度，建议先看说明书再组装，避免返工。</p>
+            <div class="flex items-center gap-4">
+              <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-600">
+                <i class="far fa-thumbs-up"></i>
+                <span>8</span>
+              </button>
+              <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-600">
+                <i class="far fa-comment"></i>
+                <span>回复</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 评论项2 -->
+      <div class="comment-item bg-white rounded-xl p-4 shadow-sm" data-body-part="胸部">
+        <div class="flex items-start gap-3">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=40&h=40&fit=crop" alt="avatar" class="w-10 h-10 rounded-full">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-sm font-semibold text-gray-800">模型爱好者</span>
+              <span class="text-xs text-gray-600 bg-gray-50 px-2 py-0.5 rounded-full">胸部</span>
+              <span class="text-xs text-gray-400">5小时前</span>
+            </div>
+            <p class="text-sm text-gray-700 mb-2">胸部的A8-A12零件比较多，建议分步骤组装，先组装核心部分再装外甲。</p>
+            <div class="flex items-center gap-4">
+              <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-600">
+                <i class="far fa-thumbs-up"></i>
+                <span>12</span>
+              </button>
+              <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-600">
+                <i class="far fa-comment"></i>
+                <span>回复</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 评论项3 -->
+      <div class="comment-item bg-white rounded-xl p-4 shadow-sm" data-body-part="左臂">
+        <div class="flex items-start gap-3">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop" alt="avatar" class="w-10 h-10 rounded-full">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-sm font-semibold text-gray-800">高达新手</span>
+              <span class="text-xs text-gray-600 bg-gray-50 px-2 py-0.5 rounded-full">左臂</span>
+              <span class="text-xs text-gray-400">1天前</span>
+            </div>
+            <p class="text-sm text-gray-700 mb-2">左臂的A4-A7零件连接处比较紧，需要稍微打磨一下水口，不然很难卡进去。</p>
+            <div class="flex items-center gap-4">
+              <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-600">
+                <i class="far fa-thumbs-up"></i>
+                <span>5</span>
+              </button>
+              <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-600">
+                <i class="far fa-comment"></i>
+                <span>回复</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 评论项4 -->
+      <div class="comment-item bg-white rounded-xl p-4 shadow-sm" data-body-part="右臂">
+        <div class="flex items-start gap-3">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop" alt="avatar" class="w-10 h-10 rounded-full">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-sm font-semibold text-gray-800">制作达人</span>
+              <span class="text-xs text-gray-600 bg-gray-50 px-2 py-0.5 rounded-full">右臂</span>
+              <span class="text-xs text-gray-400">2天前</span>
+            </div>
+            <p class="text-sm text-gray-700 mb-2">右臂B1-B4的关节可动性很好，建议先测试一下再继续组装其他部分。</p>
+            <div class="flex items-center gap-4">
+              <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-600">
+                <i class="far fa-thumbs-up"></i>
+                <span>15</span>
+              </button>
+              <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-600">
+                <i class="far fa-comment"></i>
+                <span>回复</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 评论项5 -->
+      <div class="comment-item bg-white rounded-xl p-4 shadow-sm" data-body-part="武器">
+        <div class="flex items-start gap-3">
+          <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=40&h=40&fit=crop" alt="avatar" class="w-10 h-10 rounded-full">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-sm font-semibold text-gray-800">收藏家</span>
+              <span class="text-xs text-gray-600 bg-gray-50 px-2 py-0.5 rounded-full">武器</span>
+              <span class="text-xs text-gray-400">3天前</span>
+            </div>
+            <p class="text-sm text-gray-700 mb-2">武器D1-D2的细节很丰富，建议用细笔进行补色，效果会更好。</p>
+            <div class="flex items-center gap-4">
+              <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-600">
+                <i class="far fa-thumbs-up"></i>
+                <span>9</span>
+              </button>
+              <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-600">
+                <i class="far fa-comment"></i>
+                <span>回复</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 评论项6 - 带图片 -->
+      <div class="comment-item bg-white rounded-xl p-4 shadow-sm" data-body-part="头部">
+        <div class="flex items-start gap-3">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=40&h=40&fit=crop" alt="avatar" class="w-10 h-10 rounded-full">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-sm font-semibold text-gray-800">专业玩家</span>
+              <span class="text-xs text-gray-600 bg-gray-50 px-2 py-0.5 rounded-full">头部</span>
+              <span class="text-xs text-gray-400">1周前</span>
+            </div>
+            <p class="text-sm text-gray-700 mb-2">头部的组装完成图，给大家参考一下。</p>
+            <img src="https://images.unsplash.com/photo-1607603752448-5b0b8c0a8c4a?w=300&h=200&fit=crop" alt="comment image" class="w-full rounded-lg mb-2">
+            <div class="flex items-center gap-4">
+              <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-600">
+                <i class="far fa-thumbs-up"></i>
+                <span>23</span>
+              </button>
+              <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-600">
+                <i class="far fa-comment"></i>
+                <span>回复</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部导航栏 - 优化设计 -->
+  <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 backdrop-blur-md bg-white bg-opacity-95">
+    <div class="flex">
+      <a href="home.html" class="flex-1 flex flex-col items-center justify-center py-3 text-gray-500 hover:text-gray-700 transition-colors">
+        <div class="w-6 h-6 flex items-center justify-center">
+          <i class="fas fa-home text-lg"></i>
+        </div>
+        <span class="text-xs mt-1">首页</span>
+      </a>
+      <a href="workspace.html" class="flex-1 flex flex-col items-center justify-center py-3 text-gray-500 hover:text-gray-700 transition-colors">
+        <div class="w-6 h-6 flex items-center justify-center">
+          <i class="fas fa-briefcase text-lg"></i>
+        </div>
+        <span class="text-xs mt-1">工作台</span>
+      </a>
+      <a href="profile.html" class="flex-1 flex flex-col items-center justify-center py-3 text-gray-500 hover:text-gray-700 transition-colors">
+        <div class="w-6 h-6 flex items-center justify-center">
+          <i class="far fa-user text-lg"></i>
+        </div>
+        <span class="text-xs mt-1">我的</span>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

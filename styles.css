@@ -1,0 +1,250 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #F5F5F7;
+}
+
+/* iOS 风格颜色变量 - 现代化色彩系统 */
+:root {
+  --color-bg: #FAFBFC;
+  --color-card: #FFFFFF;
+  --color-text-primary: #0F1419;
+  --color-text-secondary: #626B73;
+  --color-text-tertiary: #8B95A0;
+  --color-divider: #E5E8EB;
+
+  /* 品牌色系统 */
+  --color-primary: #FF6B6B;         /* 主色：活力红 */
+  --color-primary-light: #FF8787;
+  --color-primary-dark: #E63946;
+
+  /* 辅助色系 */
+  --color-secondary: #4ECDC4;       /* 次色：清爽青绿 */
+  --color-tertiary: #FFD93D;        /* 强调色：温暖金色 */
+
+  /* 功能色系 */
+  --color-success: #6BCB77;         /* 成功绿 */
+  --color-warning: #FF9F43;         /* 警告橙 */
+  --color-error: #FF6B6B;           /* 错误红 */
+  --color-info: #4ECDC4;            /* 信息青 */
+
+  /* 灰度系统 */
+  --color-gray-1: #FAFBFC;
+  --color-gray-2: #F1F3F5;
+  --color-gray-3: #E5E8EB;
+  --color-gray-4: #C9CED6;
+  --color-gray-5: #8B95A0;
+  --color-gray-6: #626B73;
+  --color-gray-7: #3D4451;
+  --color-gray-8: #0F1419;
+
+  /* 系统色 */
+  --color-system-blue: #0A84FF;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D5D5D7;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #86868B;
+}
+
+/* 隐藏滚动条样式 */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* 玻璃拟态效果（iOS风格） */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* 现代渐变背景 */
+.gradient-primary {
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8787 100%);
+}
+
+.gradient-secondary {
+  background: linear-gradient(135deg, #4ECDC4 0%, #45B7AA 100%);
+}
+
+.gradient-tertiary {
+  background: linear-gradient(135deg, #FFD93D 0%, #FFBE5B 100%);
+}
+
+.gradient-profile {
+  background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%);
+}
+
+/* 卡片阴影优化 - 采用iOS风格 */
+.shadow-sm {
+  box-shadow: 0 2px 8px rgba(15, 20, 25, 0.06), 0 1px 3px rgba(15, 20, 25, 0.04);
+}
+
+.shadow-md {
+  box-shadow: 0 4px 12px rgba(15, 20, 25, 0.1), 0 2px 6px rgba(15, 20, 25, 0.06);
+}
+
+.shadow-lg {
+  box-shadow: 0 8px 24px rgba(15, 20, 25, 0.12), 0 4px 12px rgba(15, 20, 25, 0.08);
+}
+
+/* 圆角优化 */
+.rounded-xl {
+  border-radius: 12px;
+}
+
+.rounded-2xl {
+  border-radius: 16px;
+}
+
+/* 背景渐变卡片 */
+.card-gradient {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
+  border: 1px solid var(--color-divider);
+}
+
+/* 现代卡片设计 */
+.card-modern {
+  background: var(--color-card);
+  border: 1px solid var(--color-divider);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+}
+
+.card-modern:hover {
+  box-shadow: 0 8px 24px rgba(15, 20, 25, 0.12);
+  transform: translateY(-2px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 按钮优化 */
+button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 12px;
+}
+
+button:active {
+  transform: scale(0.96);
+}
+
+/* 主色按钮 */
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 6px 16px rgba(255, 107, 107, 0.4);
+}
+
+/* 次色按钮 */
+.btn-secondary {
+  background: linear-gradient(135deg, var(--color-secondary) 0%, #45B7AA 100%);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(78, 205, 196, 0.3);
+}
+
+.btn-secondary:hover {
+  box-shadow: 0 6px 16px rgba(78, 205, 196, 0.4);
+}
+
+
+/* 文字层级 */
+.text-primary {
+  color: #1D1D1D;
+  font-weight: 600;
+}
+
+.text-secondary {
+  color: #86868B;
+  font-weight: 500;
+}
+
+.text-tertiary {
+  color: #A1A1A6;
+  font-weight: 400;
+}
+
+/* 链接样式 */
+a {
+  transition: color 0.2s ease;
+}
+
+a:active {
+  opacity: 0.6;
+}
+
+/* 输入框优化 */
+input, textarea {
+  border: 1px solid #D5D5D7;
+  border-radius: 12px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #86868B;
+  box-shadow: 0 0 0 3px rgba(134, 134, 139, 0.1);
+}
+
+/* 动画优化 */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+/* 页面过渡效果 */
+.page-transition {
+  animation: slideUp 0.3s ease-out;
+}
+
+
+
+
+
+
+
+

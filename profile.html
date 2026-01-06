@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的 - 手工制作</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .gradient-header {
+      background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%);
+    }
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .menu-item-hover:hover {
+      background-color: #F5F5F7;
+      transition: background-color 0.2s ease;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- 状态栏 -->
+  <div class="bg-white px-5 py-2 flex justify-between items-center text-xs font-semibold">
+    <span>9:41</span>
+    <div class="flex items-center gap-1">
+      <span class="text-xs">100%</span>
+      <div class="w-5 h-2.5 bg-black rounded-sm"></div>
+      <div class="w-0.5 h-1.5 bg-black"></div>
+    </div>
+  </div>
+
+  <!-- 个人信息区 - 优化设计 -->
+  <div class="gradient-header text-white px-4 py-8 relative overflow-hidden">
+    <!-- 背景装饰 -->
+    <div class="absolute top-0 right-0 w-40 h-40 bg-white opacity-10 rounded-full -mr-20 -mt-20"></div>
+    <div class="absolute bottom-0 left-0 w-32 h-32 bg-white opacity-10 rounded-full -ml-16 -mb-16"></div>
+
+    <div class="flex flex-col items-center mb-6 relative z-10">
+      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" alt="avatar" class="w-24 h-24 rounded-full mb-4 border-4 border-white shadow-lg">
+      <h2 class="text-2xl font-bold mb-1">手工爱好者</h2>
+      <p class="text-sm opacity-90">ID: handcraft_001</p>
+    </div>
+
+    <!-- 快速编辑按钮 -->
+    <div class="flex gap-2 justify-center relative z-10">
+      <button class="px-4 py-2 bg-white bg-opacity-25 backdrop-blur rounded-xl text-white text-sm font-semibold hover:bg-opacity-35 transition-all shadow-lg">
+        <i class="fas fa-edit mr-1"></i>编辑资料
+      </button>
+      <button class="px-4 py-2 bg-white bg-opacity-25 backdrop-blur rounded-xl text-white text-sm font-semibold hover:bg-opacity-35 transition-all shadow-lg">
+        <i class="fas fa-share-alt mr-1"></i>分享
+      </button>
+    </div>
+  </div>
+
+  <!-- 数据统计卡片 - 优化设计 -->
+  <div class="px-4 py-5">
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
+      <div class="grid grid-cols-3 gap-4">
+        <!-- 作品数 -->
+        <div class="stat-item">
+          <div class="w-12 h-12 bg-gradient-to-br from-red-200 to-red-100 rounded-xl flex items-center justify-center mb-2">
+            <i class="fas fa-images text-red-600 text-lg"></i>
+          </div>
+          <span class="text-2xl font-bold text-gray-900">12</span>
+          <span class="text-xs text-gray-600 font-medium">作品</span>
+        </div>
+
+        <!-- 收藏数 -->
+        <div class="stat-item">
+          <div class="w-12 h-12 bg-gradient-to-br from-pink-200 to-pink-100 rounded-xl flex items-center justify-center mb-2">
+            <i class="fas fa-heart text-pink-600 text-lg"></i>
+          </div>
+          <span class="text-2xl font-bold text-gray-900">28</span>
+          <span class="text-xs text-gray-600 font-medium">收藏</span>
+        </div>
+
+        <!-- 项目数 -->
+        <div class="stat-item">
+          <div class="w-12 h-12 bg-gradient-to-br from-cyan-200 to-cyan-100 rounded-xl flex items-center justify-center mb-2">
+            <i class="fas fa-folder text-cyan-600 text-lg"></i>
+          </div>
+          <span class="text-2xl font-bold text-gray-900">5</span>
+          <span class="text-xs text-gray-600 font-medium">项目</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 功能菜单 - 优化设计 -->
+  <div class="px-4 py-3">
+    <h3 class="text-sm font-bold text-gray-900 mb-3 px-2">快速访问</h3>
+    <div class="space-y-2 pb-2">
+      <!-- 我的作品集 -->
+      <a href="#" class="bg-white rounded-2xl p-4 shadow-sm hover:shadow-md hover:scale-102 transition-all menu-item-hover flex items-center gap-4 group">
+        <div class="w-10 h-10 bg-gradient-to-br from-red-100 to-red-50 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:from-red-200 transition-all">
+          <i class="fas fa-images text-red-600"></i>
+        </div>
+        <span class="flex-1 text-base text-gray-900 font-semibold">我的作品集</span>
+        <i class="fas fa-chevron-right text-gray-400 group-hover:translate-x-1 transition-transform"></i>
+      </a>
+
+      <!-- 我的收藏 -->
+      <a href="#" class="bg-white rounded-2xl p-4 shadow-sm hover:shadow-md hover:scale-102 transition-all menu-item-hover flex items-center gap-4 group">
+        <div class="w-10 h-10 bg-gradient-to-br from-pink-100 to-pink-50 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:from-pink-200 transition-all">
+          <i class="fas fa-heart text-pink-600"></i>
+        </div>
+        <span class="flex-1 text-base text-gray-900 font-semibold">我的收藏</span>
+        <i class="fas fa-chevron-right text-gray-400 group-hover:translate-x-1 transition-transform"></i>
+      </a>
+
+      <!-- 设置 -->
+      <a href="#" class="bg-white rounded-2xl p-4 shadow-sm hover:shadow-md hover:scale-102 transition-all menu-item-hover flex items-center gap-4 group">
+        <div class="w-10 h-10 bg-gradient-to-br from-purple-100 to-purple-50 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:from-purple-200 transition-all">
+          <i class="fas fa-cog text-purple-600"></i>
+        </div>
+        <span class="flex-1 text-base text-gray-900 font-semibold">设置</span>
+        <i class="fas fa-chevron-right text-gray-400 group-hover:translate-x-1 transition-transform"></i>
+      </a>
+    </div>
+  </div>
+
+  <!-- 最近作品 - 优化设计 -->
+  <div class="px-4 py-4 pb-20">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-sm font-bold text-gray-900">最近作品</h3>
+      <a href="#" class="text-xs text-red-600 font-semibold hover:text-red-700">查看全部</a>
+    </div>
+    <div class="grid grid-cols-4 gap-2">
+      <img src="https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=120&h=120&fit=crop" alt="work" class="w-full aspect-square rounded-xl object-cover shadow-sm hover:shadow-md transition-all hover:scale-105">
+      <img src="https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=120&h=120&fit=crop" alt="work" class="w-full aspect-square rounded-xl object-cover shadow-sm hover:shadow-md transition-all hover:scale-105">
+      <img src="https://images.unsplash.com/photo-1607603752448-5b0b8c0a8c4a?w=120&h=120&fit=crop" alt="work" class="w-full aspect-square rounded-xl object-cover shadow-sm hover:shadow-md transition-all hover:scale-105">
+      <button class="w-full aspect-square rounded-xl bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-all border-2 border-dashed border-gray-300">
+        <i class="fas fa-plus text-gray-400 text-lg"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- 底部导航栏 - 优化设计 -->
+  <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 backdrop-blur-md bg-white bg-opacity-95">
+    <div class="flex">
+      <a href="home.html" class="flex-1 flex flex-col items-center justify-center py-3 text-gray-500 hover:text-gray-700 transition-colors">
+        <div class="w-6 h-6 flex items-center justify-center">
+          <i class="fas fa-home text-lg"></i>
+        </div>
+        <span class="text-xs mt-1">首页</span>
+      </a>
+      <a href="workspace.html" class="flex-1 flex flex-col items-center justify-center py-3 text-gray-500 hover:text-gray-700 transition-colors">
+        <div class="w-6 h-6 flex items-center justify-center">
+          <i class="fas fa-briefcase text-lg"></i>
+        </div>
+        <span class="text-xs mt-1">工作台</span>
+      </a>
+      <a href="profile.html" class="flex-1 flex flex-col items-center justify-center py-3 text-purple-600 font-semibold">
+        <div class="w-6 h-6 flex items-center justify-center">
+          <i class="far fa-user text-lg"></i>
+        </div>
+        <span class="text-xs mt-1">我的</span>
+        <div class="w-1.5 h-1.5 bg-purple-600 rounded-full mt-1"></div>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<svg width="393" height="852" viewBox="0 0 393 852" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <g id="background">
+    <rect width="393" height="852" fill="#FFFFFF"/>
+  </g>
+  
+  <!-- 状态栏 -->
+  <g id="status-bar">
+    <text x="20" y="20" font-family="Arial" font-size="14" font-weight="600" fill="#000000">9:41</text>
+    <text x="350" y="20" font-family="Arial" font-size="12" fill="#000000">100%</text>
+    <rect x="330" y="8" width="20" height="10" rx="2" fill="#000000"/>
+    <rect x="355" y="10" width="2" height="6" fill="#000000"/>
+  </g>
+  
+  <!-- 搜索框 -->
+  <g id="search-box">
+    <rect x="20" y="60" width="353" height="48" rx="12" fill="#F5F5F5" fill-opacity="0.6" stroke="#E0E0E0" stroke-width="1"/>
+    <circle cx="50" cy="84" r="8" fill="none" stroke="#999999" stroke-width="1.5"/>
+    <path d="M 45 84 L 42 87 M 55 84 L 58 87" stroke="#999999" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="70" y="90" font-family="Arial" font-size="14" fill="#999999">搜索手工内容</text>
+  </g>
+  
+  <!-- 分类栏 -->
+  <g id="category-bar">
+    <rect x="20" y="130" width="353" height="50" fill="none"/>
+    <!-- 布艺 -->
+    <g id="category-fabric">
+      <rect x="20" y="140" width="70" height="40" rx="20" fill="#8B5CF6" fill-opacity="0.1"/>
+      <text x="55" y="165" font-family="Arial" font-size="14" font-weight="500" fill="#8B5CF6" text-anchor="middle">布艺</text>
+    </g>
+    <!-- 木工 -->
+    <g id="category-wood">
+      <rect x="100" y="140" width="70" height="40" rx="20" fill="#E0E0E0"/>
+      <text x="135" y="165" font-family="Arial" font-size="14" fill="#666666" text-anchor="middle">木工</text>
+    </g>
+    <!-- 纸艺 -->
+    <g id="category-paper">
+      <rect x="180" y="140" width="70" height="40" rx="20" fill="#E0E0E0"/>
+      <text x="215" y="165" font-family="Arial" font-size="14" fill="#666666" text-anchor="middle">纸艺</text>
+    </g>
+    <!-- 饰品 -->
+    <g id="category-jewelry">
+      <rect x="260" y="140" width="70" height="40" rx="20" fill="#E0E0E0"/>
+      <text x="295" y="165" font-family="Arial" font-size="14" fill="#666666" text-anchor="middle">饰品</text>
+    </g>
+    <!-- 高达 -->
+    <g id="category-gundam">
+      <rect x="340" y="140" width="70" height="40" rx="20" fill="#E0E0E0"/>
+      <text x="375" y="165" font-family="Arial" font-size="14" fill="#666666" text-anchor="middle">高达</text>
+    </g>
+  </g>
+  
+  <!-- 缺省图区域 -->
+  <g id="empty-state">
+    <rect x="20" y="200" width="353" height="500" rx="12" fill="#FAFAFA" stroke="#E0E0E0" stroke-width="1"/>
+    <!-- 占位图标 -->
+    <g id="empty-icon">
+      <circle cx="196.5" cy="380" r="60" fill="none" stroke="#D0D0D0" stroke-width="2" stroke-dasharray="4 4"/>
+      <path d="M 176.5 360 L 216.5 400 M 216.5 360 L 176.5 400" stroke="#D0D0D0" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="196.5" cy="380" r="30" fill="none" stroke="#D0D0D0" stroke-width="1.5"/>
+    </g>
+    <text x="196.5" y="460" font-family="Arial" font-size="16" fill="#999999" text-anchor="middle">暂无内容</text>
+    <text x="196.5" y="485" font-family="Arial" font-size="14" fill="#999999" text-anchor="middle">去发现更多手工灵感</text>
+  </g>
+  
+  <!-- 底部导航栏 -->
+  <g id="bottom-nav">
+    <rect x="0" y="780" width="393" height="72" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1"/>
+    <!-- 首页 -->
+    <g id="nav-home">
+      <rect x="0" y="780" width="131" height="72" fill="none"/>
+      <path d="M 65.5 800 L 45 820 L 45 835 L 65.5 850 L 86 835 L 86 820 Z" fill="none" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M 55 820 L 55 835 L 65.5 845 L 76 835 L 76 820" fill="#8B5CF6"/>
+      <text x="65.5" y="860" font-family="Arial" font-size="12" fill="#8B5CF6" text-anchor="middle">首页</text>
+    </g>
+    <!-- 工作台 -->
+    <g id="nav-workspace">
+      <rect x="131" y="780" width="131" height="72" fill="none"/>
+      <rect x="171.5" y="800" width="30" height="30" rx="4" fill="none" stroke="#999999" stroke-width="1.5"/>
+      <rect x="176.5" y="805" width="20" height="20" rx="2" fill="none" stroke="#999999" stroke-width="1"/>
+      <text x="196.5" y="860" font-family="Arial" font-size="12" fill="#999999" text-anchor="middle">工作台</text>
+    </g>
+    <!-- 我的 -->
+    <g id="nav-profile">
+      <rect x="262" y="780" width="131" height="72" fill="none"/>
+      <circle cx="327.5" cy="815" r="15" fill="none" stroke="#999999" stroke-width="1.5"/>
+      <circle cx="327.5" cy="810" r="6" fill="none" stroke="#999999" stroke-width="1.5"/>
+      <path d="M 315 825 Q 327.5 830 340 825" stroke="#999999" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <text x="327.5" y="860" font-family="Arial" font-size="12" fill="#999999" text-anchor="middle">我的</text>
+    </g>
+  </g>
+</svg>
+
+
+
+
+
+
+
+
